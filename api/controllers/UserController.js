@@ -6,7 +6,7 @@ module.exports = {
 		user.chatId = User.getId();
 
 		User.findOne({phone : user.phone})
-		    .exec(function(err, foundUser){
+		    .exec( function (err, foundUser) {
 		    	if (!foundUser) {
 		    		User.create(user)
 		    		    .exec(function(err, user) {
@@ -20,17 +20,19 @@ module.exports = {
 		    	else
 		    	{
 		    		return res.serverError('phone already exists');
-		    	}
-		    });
-
+		    	}});
 	},
 
 	get : function (req, res) {
-		var id = req.param('id');
+		//Todo, add validation for request
 
-		User.findOne({id: id})
-		    .exec(function(err, user) {
-				if (err) {
+		var id = req.param('id');
+		var phone = req.param('phone');
+		var criteria = id != null ? {id : id} : {phone : phone};
+
+		User.findOne(criteria)
+		    .exec( function(err, user) {
+		    	if (err) {
 					return res.serverError(err);
 				}
 
@@ -39,7 +41,7 @@ module.exports = {
 				}
 
 				return res.status(200).json(user);
-			});
+		      });
 	},
 
 	update : function (req, res) {
@@ -47,8 +49,8 @@ module.exports = {
 		user.id = req.param('id');
 
 		User.update({id : user.id}, user)
-		    .exec(function(err, user) {
-				if (err) {
+		    .exec( function(err, user) {
+		    	if (err) {
 					return res.serverError(err);
 				}
 

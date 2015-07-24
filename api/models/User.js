@@ -27,8 +27,7 @@ module.exports = {
   	},
   	gender : {
   		type : 'string',
-  		in: ['male', 'female'],
-        required: true
+  		in: ['male', 'female']
   	},
   	name : 'string',
   	nickName : 'string',
