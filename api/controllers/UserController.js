@@ -48,14 +48,24 @@ module.exports = {
 		var user = User.parseBody(req);
 		user.id = req.param('id');
 
-		User.update({id : user.id}, user)
-		    .exec( function(err, user) {
-		    	if (err) {
-					return res.serverError(err);
-				}
+		User.findOne({id: user.id})
+		    .exec( function(err, foundUser) {
+		    	if (foundUser) {
+		    		user.chatId = foundUser.chatId;
 
-				res.status(200).json(user);
-			});
+		    		User.update({id : user.id}, user)
+					    .exec( function(err, user) {
+					    	if (err) {
+								return res.serverError(err);
+							}
+
+							res.status(200).json(user);
+						});
+		    	}
+		    	else
+		    	{
+		    		return res.notFound();
+		    	}});		
 	}	
 };
 
